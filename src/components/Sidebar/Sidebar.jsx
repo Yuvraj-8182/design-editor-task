@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import './Sidebar.css';
 
-export default function Sidebar({ setElements, setCanvasBg, canvasBgImage, setCanvasBgImage }) {
+export default function Sidebar({ elements, setElements, updateElement, removeElement, setCanvasBg, canvasBgImage, setCanvasBgImage }) {
   const [activeTab, setActiveTab] = useState('text');
 
   const addText = (level) => {
@@ -65,6 +65,10 @@ export default function Sidebar({ setElements, setCanvasBg, canvasBgImage, setCa
           onClick={() => setActiveTab('upload')}
         >Upload</button>
         <button 
+          className={`tab-btn ${activeTab === 'quick-edit' ? 'active' : ''}`}
+          onClick={() => setActiveTab('quick-edit')}
+        >Quick Edit</button>
+        <button 
           className={`tab-btn ${activeTab === 'background' ? 'active' : ''}`}
           onClick={() => setActiveTab('background')}
         >Elements</button>
@@ -80,6 +84,35 @@ export default function Sidebar({ setElements, setCanvasBg, canvasBgImage, setCa
               <button className="btn" onClick={() => addText('h2')} style={{fontSize: '20px', fontWeight: '600'}}>Add Heading 2</button>
               <button className="btn" onClick={() => addText('h3')} style={{fontSize: '18px', fontWeight: '500'}}>Add Heading 3</button>
               <button className="btn" onClick={() => addText('p')}>Add Paragraph</button>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'quick-edit' && (
+          <div className="section">
+            <h3>Quick Edit</h3>
+            <p className="helper-text">Edit all text elements on the canvas</p>
+            <div className="quick-edit-list">
+              {elements.filter(el => el.type === 'text').length === 0 ? (
+                <p className="no-elements-text">No text on canvas.</p>
+              ) : (
+                elements.filter(el => el.type === 'text').map((el, idx) => (
+                  <div key={el.id} className="quick-edit-item">
+                    <label className="quick-edit-label">Text {idx + 1}</label>
+                    <div className="quick-edit-input-group">
+                      <input 
+                        className="quick-edit-input"
+                        type="text" 
+                        value={el.text} 
+                        onChange={(e) => updateElement(el.id, { text: e.target.value })} 
+                      />
+                      <button className="quick-edit-delete" onClick={() => removeElement(el.id)} title="Remove Text">
+                        ✕
+                      </button>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         )}

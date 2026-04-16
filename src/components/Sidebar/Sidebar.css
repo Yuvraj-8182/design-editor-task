@@ -154,3 +154,75 @@ input[type="color"]::-webkit-color-swatch {
   background-color: #ef4444;
   color: white;
 }
+
+/* Quick Edit Styles */
+.quick-edit-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.no-elements-text {
+  font-size: 14px;
+  color: var(--text-secondary);
+  font-style: italic;
+  padding: 12px 0;
+}
+
+.quick-edit-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background-color: var(--bg-element);
+  padding: 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+}
+
+.quick-edit-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.quick-edit-input-group {
+  display: flex;
+  gap: 8px;
+}
+
+.quick-edit-input {
+  flex: 1;
+  background-color: var(--bg-panel);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.quick-edit-input:focus {
+  border-color: var(--accent);
+}
+
+.quick-edit-delete {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: none;
+  width: 36px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.quick-edit-delete:hover {
+  background-color: #ef4444;
+  color: white;
+}

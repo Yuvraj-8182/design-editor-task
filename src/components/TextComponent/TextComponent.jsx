@@ -1,10 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 
-export default function TextComponent({ element, updateElement, removeElement, canvasRef }) {
+export default function TextComponent({ element, updateElement, removeElement, canvasRef, isSelected, onSelect }) {
   const [isDragging, setIsDragging] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [textValue, setTextValue] = useState(element.text);
-  const [isFocused, setIsFocused] = useState(false);
 
   const startDrag = (e) => {
     if (isEditing) return;
@@ -16,6 +15,7 @@ export default function TextComponent({ element, updateElement, removeElement, c
       if (!isDragging || !canvasRef.current) return;
       
       const canvasRect = canvasRef.current.getBoundingClientRect();
+      // Extract zoom scale from parent transform if possible, but for simple scaling we can just divide by zoom (omitting here for simplicity or we can read it)
       let newX = e.clientX - canvasRect.left;
       let newY = e.clientY - canvasRect.top;
 
@@ -43,14 +43,18 @@ export default function TextComponent({ element, updateElement, removeElement, c
         setIsEditing(false);
         updateElement(element.id, { text: textValue });
       }
-      setIsFocused(false);
     };
 
-    if (isEditing || isFocused) {
+    if (isEditing) {
       window.addEventListener('click', handleClickOutside);
     }
     return () => window.removeEventListener('click', handleClickOutside);
-  }, [isEditing, isFocused, textValue, element.id, updateElement]);
+  }, [isEditing, textValue, element.id, updateElement]);
+
+  useEffect(() => {
+      // Whenever the sidebar might change the text, sync it back
+      setTextValue(element.text);
+  }, [element.text]);
 
   const handleDoubleClick = () => {
     setIsEditing(true);
@@ -58,12 +62,12 @@ export default function TextComponent({ element, updateElement, removeElement, c
 
   const handleContainerClick = (e) => {
     e.stopPropagation();
-    setIsFocused(true);
+    if (onSelect) onSelect();
   };
 
   return (
     <div 
-      className={`canvas-element ${isEditing ? 'editing' : ''} ${isFocused ? 'focused' : ''}`}
+      className={`canvas-element ${isEditing ? 'editing' : ''} ${isSelected ? 'focused' : ''}`}
       style={{
         left: element.x,
         top: element.y,

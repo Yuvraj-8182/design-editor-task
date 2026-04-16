@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 
-export default function ImageComponent({ element, updateElement, removeElement, canvasRef }) {
+export default function ImageComponent({ element, updateElement, removeElement, canvasRef, isSelected, onSelect }) {
   const [isDragging, setIsDragging] = useState(false);
-  const [isFocused, setIsFocused] = useState(false);
 
   const startDrag = (e) => {
     setIsDragging(true);
@@ -34,22 +33,14 @@ export default function ImageComponent({ element, updateElement, removeElement, 
     };
   }, [isDragging, element.id, updateElement, canvasRef]);
 
-  useEffect(() => {
-    const handleClickOutside = () => setIsFocused(false);
-    if (isFocused) {
-      window.addEventListener('click', handleClickOutside);
-    }
-    return () => window.removeEventListener('click', handleClickOutside);
-  }, [isFocused]);
-
   const handleContainerClick = (e) => {
     e.stopPropagation();
-    setIsFocused(true);
+    if (onSelect) onSelect();
   };
 
   return (
     <div 
-      className={`canvas-element ${isFocused ? 'focused' : ''}`}
+      className={`canvas-element ${isSelected ? 'focused' : ''}`}
       style={{
         left: element.x,
         top: element.y,
@@ -72,7 +63,7 @@ export default function ImageComponent({ element, updateElement, removeElement, 
           width: element.width,
           height: 'auto',
           display: 'block',
-          boxShadow: isFocused ? '0 0 0 2px var(--accent)' : 'none',
+          boxShadow: isSelected ? '0 0 0 2px var(--accent)' : 'none',
           borderRadius: '4px',
           pointerEvents: 'none' // allow parent dev to handle drag easily
         }} 

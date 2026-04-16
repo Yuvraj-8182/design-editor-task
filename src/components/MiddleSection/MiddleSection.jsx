@@ -3,28 +3,29 @@ import TextComponent from '../TextComponent/TextComponent';
 import ImageComponent from '../ImageComponent/ImageComponent';
 import './MiddleSection.css';
 
-export default function MiddleSection({ elements, setElements, canvasBg, canvasBgImage }) {
+export default function MiddleSection({ elements, updateElement, removeElement, canvasBg, canvasBgImage, zoom, selectedId, setSelectedId }) {
   const canvasRef = useRef(null);
 
-  const updateElement = (id, newProps) => {
-    setElements(prev => prev.map(el => el.id === id ? { ...el, ...newProps } : el));
-  };
-
-  const removeElement = (id) => {
-    setElements(prev => prev.filter(el => el.id !== id));
+  const handleCanvasClick = (e) => {
+    // If clicking directly on the canvas-area (not children), deselect everything
+    if (e.target.className === 'canvas-area') {
+      setSelectedId(null);
+    }
   };
 
   return (
-    <main className="middle-section">
-      <div className="canvas-container">
+    <main className="middle-section" style={{ flex: 1, overflow: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div className="canvas-container" style={{ transform: `scale(${zoom})`, transformOrigin: 'center center', transition: 'transform 0.2s ease' }}>
         <div 
           className="canvas-area" 
           ref={canvasRef}
+          onClick={handleCanvasClick}
           style={{ 
             backgroundColor: canvasBg,
             backgroundImage: canvasBgImage ? `url(${canvasBgImage})` : 'none',
             backgroundSize: 'cover',
-            backgroundPosition: 'center'
+            backgroundPosition: 'center',
+            position: 'relative'
           }}
         >
           {elements.map(el => {
@@ -36,6 +37,8 @@ export default function MiddleSection({ elements, setElements, canvasBg, canvasB
                   updateElement={updateElement} 
                   removeElement={removeElement}
                   canvasRef={canvasRef}
+                  isSelected={selectedId === el.id}
+                  onSelect={() => setSelectedId(el.id)}
                 />
               );
             }
@@ -47,6 +50,8 @@ export default function MiddleSection({ elements, setElements, canvasBg, canvasB
                    updateElement={updateElement}
                    removeElement={removeElement}
                    canvasRef={canvasRef}
+                   isSelected={selectedId === el.id}
+                   onSelect={() => setSelectedId(el.id)}
                  />
                );
             }

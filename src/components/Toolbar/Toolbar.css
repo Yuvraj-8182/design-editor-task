@@ -1,0 +1,70 @@
+.dynamic-toolbar {
+  background-color: var(--bg-panel);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  z-index: 10;
+  height: 50px;
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.toolbar-label {
+  font-weight: 600;
+  color: var(--text-primary);
+  border-right: 1px solid var(--border);
+  padding-right: 24px;
+}
+
+.toolbar-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.toolbar-controls label {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.toolbar-controls input[type="color"] {
+  -webkit-appearance: none;
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  background: none;
+  padding: 0;
+}
+
+.toolbar-controls input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+.toolbar-controls input[type="color"]::-webkit-color-swatch {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.toolbar-controls select,
+.toolbar-controls input[type="number"] {
+  background-color: var(--bg-element);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  outline: none;
+  font-size: 14px;
+}
+
+.toolbar-controls select:focus,
+.toolbar-controls input[type="number"]:focus {
+  border-color: var(--accent);
+}
